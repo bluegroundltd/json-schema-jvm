@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "A Class",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "bproperty": {
+      "type": "string"
+    },
+    "aproperty": {
+      "type": "string"
+    }
+  }
+}
