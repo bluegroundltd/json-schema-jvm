@@ -2,7 +2,6 @@
 
 import com.vanniktech.maven.publish.GradlePublishPlugin
 
-
 plugins {
     `kotlin-dsl`
     id("com.gradle.plugin-publish") version "1.2.1"
@@ -35,6 +34,7 @@ gradlePlugin {
     plugins {
         create("generateJsonSchemaJvm") {
             id = "com.theblueground.json.schema.jvm.gradle-plugin"
+            group = "com.theblueground"
             version = "1.0.0"
             displayName = "JSON Schema Generation Plugin"
             description = "Generate JSON schema from annotated classes"
