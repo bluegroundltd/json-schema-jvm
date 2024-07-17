@@ -1,5 +1,6 @@
 import com.vanniktech.maven.publish.JavadocJar
 import com.vanniktech.maven.publish.KotlinJvm
+import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
     kotlin("jvm") version "2.0.0"
@@ -21,10 +22,12 @@ kotlin {
 mavenPublishing {
     configure(
         KotlinJvm(
-            javadocJar = JavadocJar.None(),
+            javadocJar = JavadocJar.Javadoc(),
             sourcesJar = true,
         )
     )
+
+    publishToMavenCentral(SonatypeHost.S01, automaticRelease = true)
 
     coordinates("io.github.bluegroundltd", "generate-schema-annotation", "1.0.0")
 
@@ -52,4 +55,6 @@ mavenPublishing {
             developerConnection.set("scm:git:ssh://git@github.com/bluegroundltd/json-schema-jvm.git")
         }
     }
+
+    signAllPublications()
 }

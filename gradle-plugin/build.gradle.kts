@@ -1,14 +1,16 @@
 @file:Suppress("UnstableApiUsage")
 
+import com.vanniktech.maven.publish.GradlePublishPlugin
+
+
 plugins {
     `kotlin-dsl`
-    `maven-publish`
     id("com.gradle.plugin-publish") version "1.2.1"
+    id("com.vanniktech.maven.publish") version "0.29.0"
 }
 
 repositories {
     mavenCentral()
-    mavenLocal()
 }
 
 dependencies {
@@ -40,4 +42,8 @@ gradlePlugin {
             implementationClass = "com.theblueground.json.schema.jvm.gradleplugin.JsonSchemaJvmPlugin"
         }
     }
+}
+
+mavenPublishing {
+    configure(GradlePublishPlugin())
 }
