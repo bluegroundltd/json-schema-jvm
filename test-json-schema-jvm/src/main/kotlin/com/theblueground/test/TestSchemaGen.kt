@@ -2,7 +2,6 @@ package com.theblueground.test
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import io.github.bluegroundltd.GenerateJsonSchema
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.serialization.Serializable
 
 @Serializable

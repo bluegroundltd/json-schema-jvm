@@ -15,9 +15,6 @@ repositories {
 dependencies {
     compileOnly(gradleApi())
     implementation("io.github.bluegroundltd:generate-schema-annotation:1.0.0")
-    implementation(platform("com.github.victools:jsonschema-generator-bom:4.35.0"))
-    implementation("com.github.victools:jsonschema-generator")
-    implementation("com.github.victools:jsonschema-module-jackson")
     implementation("com.kjetland:mbknor-jackson-jsonschema_2.13:1.0.39")
 }
 
@@ -35,7 +32,7 @@ gradlePlugin {
         create("generateJsonSchemaJvm") {
             id = "com.theblueground.json.schema.jvm.gradle-plugin"
             group = "com.theblueground"
-            version = "1.0.0"
+            version = "1.0.1"
             displayName = "JSON Schema Generation Plugin"
             description = "Generate JSON schema from annotated classes"
             tags = listOf("json", "schema")
