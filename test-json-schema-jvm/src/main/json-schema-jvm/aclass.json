@@ -4,10 +4,10 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "bproperty": {
+    "aproperty": {
       "type": "string"
     },
-    "aproperty": {
+    "bproperty": {
       "type": "string"
     }
   }
