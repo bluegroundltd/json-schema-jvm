@@ -2,8 +2,8 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-JSON Schema JVM is a Java/Kotlin library for generating JSON schemas from your data classes. 
-This library simplifies the process of creating JSON schemas directly from your Java or Kotlin classes, 
+JSON Schema JVM is a Java/Kotlin library for generating JSON schemas from your data classes.
+This library simplifies the process of creating JSON schemas directly from your Java or Kotlin classes,
 making it easy to ensure your data structures conform to specified formats.
 
 ## Features
@@ -23,7 +23,7 @@ Add the following dependencies to your `build.gradle.kts` file:
 
 ```kotlin
 plugins {
-    id("com.theblueground.json.schema.jvm.gradle-plugin") version "1.0.0"
+    id("com.theblueground.json.schema.jvm.gradle-plugin") version "1.0.1"
 }
 
 dependencies {
