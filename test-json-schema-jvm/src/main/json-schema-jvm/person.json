@@ -9,6 +9,27 @@
     },
     "age": {
       "type": "integer"
+    },
+    "date": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "time": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "dateTime": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "instant": {
+      "type": "number"
     }
   },
   "required": [

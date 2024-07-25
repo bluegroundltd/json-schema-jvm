@@ -1,6 +1,7 @@
 package com.theblueground.json.schema.jvm.gradleplugin
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.kjetland.jackson.jsonSchema.JsonSchemaConfig
 import com.kjetland.jackson.jsonSchema.JsonSchemaDraft
 import com.kjetland.jackson.jsonSchema.JsonSchemaGenerator
@@ -26,7 +27,9 @@ internal abstract class JsonSchemaJvmGenerationTask @Inject constructor(
 
     companion object {
         const val NAME = "jsonSchemaJvmGenerationTask"
-        private val MAPPER = ObjectMapper()
+        private val MAPPER = ObjectMapper().apply {
+            registerModule(JavaTimeModule())
+        }
     }
 
     @TaskAction
