@@ -47,6 +47,14 @@ data class Person(
 )
 ```
 
+#### Example extension configuration
+
+```kotlin
+jsonSchemaJvmExtension {
+  packageToScan.set(setOf("com.example"))
+}
+```
+
 #### Example generated JSON schema
 
 ```json
