@@ -1,20 +1,21 @@
 package com.theblueground.json.schema.jvm.gradleplugin
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.kjetland.jackson.jsonSchema.JsonSchemaConfig
 import com.kjetland.jackson.jsonSchema.JsonSchemaDraft
 import com.kjetland.jackson.jsonSchema.JsonSchemaGenerator
 import io.github.bluegroundltd.GenerateJsonSchema
+import java.io.File
+import javax.inject.Inject
+import kotlin.reflect.full.findAnnotation
 import org.gradle.api.DefaultTask
 import org.gradle.api.Task
 import org.gradle.api.logging.Logger
 import org.gradle.api.logging.Logging
 import org.gradle.api.specs.Spec
 import org.gradle.api.tasks.TaskAction
-import java.io.File
-import javax.inject.Inject
-import kotlin.reflect.full.findAnnotation
 
 
 internal abstract class JsonSchemaJvmGenerationTask @Inject constructor(
@@ -30,6 +31,7 @@ internal abstract class JsonSchemaJvmGenerationTask @Inject constructor(
         private val MAPPER = ObjectMapper().apply {
             registerModule(JavaTimeModule())
         }
+        private val PRETTY_WRITTER = MAPPER.writerWithDefaultPrettyPrinter()
     }
 
     @TaskAction
@@ -50,6 +52,9 @@ internal abstract class JsonSchemaJvmGenerationTask @Inject constructor(
 
             val srcPath = project.getSrcAbsolutePath().path
             val outputPath = jsonSchemaJvmExtension.outputDirectory.getOrElse("$srcPath/json-schema-jvm")
+
+            val writeDatesAsTimestamps = jsonSchemaJvmExtension.writeDatesAsTimestamps.getOrElse(true)
+            MAPPER.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, writeDatesAsTimestamps)
 
             val projectClasses = canonicalClassNames
                 .map { classLoader.loadClass(it).kotlin }
@@ -80,7 +85,7 @@ internal abstract class JsonSchemaJvmGenerationTask @Inject constructor(
                 }
 
                 val schema = schemaGen.generateJsonSchema(classLoader.loadClass(it.qualifiedName))
-                val schemaJsonText = MAPPER.writeValueAsString(schema)
+                val schemaJsonText = PRETTY_WRITTER.writeValueAsString(schema)
 
                 logger.info("Generated JSON schema: $schemaJsonText")
 

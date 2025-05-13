@@ -19,4 +19,7 @@ open class JsonSchemaJvmExtension @Inject constructor(
 
     @get:Input
     val outputDirectory: Property<String> = objects.property(String::class.java)
+
+    @get:Input
+    val writeDatesAsTimestamps: Property<Boolean> = objects.property(Boolean::class.java)
 }
