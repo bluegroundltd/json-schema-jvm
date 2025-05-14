@@ -17,6 +17,7 @@ dependencies {
     implementation("io.github.bluegroundltd:generate-schema-annotation:1.0.0")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.2")
     implementation("com.kjetland:mbknor-jackson-jsonschema_2.13:1.0.39")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.2")
 }
 
 kotlin {

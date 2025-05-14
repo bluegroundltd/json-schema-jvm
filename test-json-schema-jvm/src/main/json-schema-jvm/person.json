@@ -25,7 +25,10 @@
     "instant" : {
       "type" : "string",
       "format" : "date-time"
+    },
+    "nullableField" : {
+      "type" : "integer"
     }
   },
-  "required" : [ "age" ]
+  "required" : [ "name", "age", "date", "time", "dateTime", "instant" ]
 }

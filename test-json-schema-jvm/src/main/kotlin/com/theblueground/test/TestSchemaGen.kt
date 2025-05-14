@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 
 @GenerateJsonSchema
-data class AClass(@JsonProperty(value = "foo") val aProperty: String, @JsonProperty(value = "bar") val bProperty: String)
+data class AClass(@get:JsonProperty(value = "foo") val aProperty: String, @get:JsonProperty(value = "bar") val bProperty: String)
 
 @GenerateJsonSchema
 data class Person(
@@ -17,5 +17,6 @@ data class Person(
     val date: LocalDate,
     val time: LocalTime,
     val dateTime: LocalDateTime,
-    val instant: Instant
+    val instant: Instant,
+    val nullableField: Int?
 )

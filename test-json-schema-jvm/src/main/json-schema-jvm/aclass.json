@@ -4,11 +4,12 @@
   "type" : "object",
   "additionalProperties" : false,
   "properties" : {
-    "bproperty" : {
+    "foo" : {
       "type" : "string"
     },
-    "aproperty" : {
+    "bar" : {
       "type" : "string"
     }
-  }
+  },
+  "required" : [ "foo", "bar" ]
 }
