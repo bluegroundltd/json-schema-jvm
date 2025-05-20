@@ -4,8 +4,8 @@ import com.vanniktech.maven.publish.GradlePublishPlugin
 
 plugins {
     `kotlin-dsl`
-    id("com.gradle.plugin-publish") version "1.2.1"
-    id("com.vanniktech.maven.publish") version "0.29.0"
+    id("com.gradle.plugin-publish") version "1.3.1"
+    id("com.vanniktech.maven.publish") version "0.32.0"
 }
 
 repositories {

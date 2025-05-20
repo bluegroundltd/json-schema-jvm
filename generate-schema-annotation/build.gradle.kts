@@ -3,9 +3,8 @@ import com.vanniktech.maven.publish.KotlinJvm
 import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
-    kotlin("jvm") version "2.0.0"
-    id("org.jetbrains.dokka") version "1.9.20"
-    id("com.vanniktech.maven.publish") version "0.29.0"
+    kotlin("jvm") version "2.1.21"
+    id("com.vanniktech.maven.publish") version "0.32.0"
 }
 
 repositories {
@@ -15,7 +14,7 @@ repositories {
 kotlin {
     jvmToolchain(17)
     compilerOptions {
-        apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
+        apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_1)
     }
 }
 
