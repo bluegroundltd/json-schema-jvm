@@ -34,7 +34,7 @@ gradlePlugin {
         create("generateJsonSchemaJvm") {
             id = "com.theblueground.json.schema.jvm.gradle-plugin"
             group = "com.theblueground"
-            version = "1.0.2"
+            version = "1.0.3"
             displayName = "JSON Schema Generation Plugin"
             description = "Generate JSON schema from annotated classes"
             tags = listOf("json", "schema")

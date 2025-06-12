@@ -31,7 +31,7 @@ mavenPublishing {
 
     publishToMavenCentral(SonatypeHost.S01, automaticRelease = true)
 
-    coordinates("io.github.bluegroundltd", "generate-schema-annotation", "1.0.0")
+    coordinates("io.github.bluegroundltd", "generate-schema-annotation", "1.0.1")
 
     pom {
         name.set("GenerateSchemaAnnotation")
