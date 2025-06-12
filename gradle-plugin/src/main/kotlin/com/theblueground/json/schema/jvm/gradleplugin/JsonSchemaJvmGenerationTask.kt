@@ -1,6 +1,7 @@
 package com.theblueground.json.schema.jvm.gradleplugin
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.ObjectWriter
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
@@ -12,34 +13,49 @@ import java.io.File
 import javax.inject.Inject
 import kotlin.reflect.full.findAnnotation
 import org.gradle.api.DefaultTask
-import org.gradle.api.Task
 import org.gradle.api.logging.Logger
 import org.gradle.api.logging.Logging
-import org.gradle.api.specs.Spec
 import org.gradle.api.tasks.TaskAction
 
-
 internal abstract class JsonSchemaJvmGenerationTask @Inject constructor(
-    private val jsonSchemaJvmExtension: JsonSchemaJvmExtension
+    private val jsonSchemaJvmExtension: JsonSchemaJvmExtension,
 ) : DefaultTask() {
+
+    companion object {
+        const val NAME = "jsonSchemaJvmGenerationTask"
+    }
 
     private val logger: Logger = Logging.getLogger(
         "JsonSchemaJVM:${JsonSchemaJvmGenerationTask::class.java.simpleName}"
     )
 
-    companion object {
-        const val NAME = "jsonSchemaJvmGenerationTask"
-        private val MAPPER = ObjectMapper().apply {
-            registerModule(JavaTimeModule())
-            registerModule(KotlinModule.Builder().build())
-        }
-        private val PRETTY_WRITTER = MAPPER.writerWithDefaultPrettyPrinter()
+    private val jsonSchemaConfig =
+        JsonSchemaConfig.vanillaJsonSchemaDraft4().withJsonSchemaDraft(JsonSchemaDraft.DRAFT_07)
+
+    private val nameFormatter = jsonSchemaJvmExtension.getNameFormatter()
+
+    private val mapper = ObjectMapper().apply {
+        registerModule(JavaTimeModule())
+        registerModule(KotlinModule.Builder().build())
+        configure(
+            SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,
+            jsonSchemaJvmExtension.writeDatesAsTimestamps.getOrElse(true)
+        )
     }
+
+    private val outputPath = jsonSchemaJvmExtension.getOutputPath(project)
+
+    private val prettyMapper: ObjectWriter = mapper.writerWithDefaultPrettyPrinter()
+
+    private val schemaGen: JsonSchemaGenerator = JsonSchemaGenerator(mapper, jsonSchemaConfig)
 
     @TaskAction
     fun run() {
-        project.mergeOutputClasspath()
+        if (!outputPath.exists()) {
+            outputPath.mkdirs()
+        }
 
+        project.mergeOutputClasspath()
         val classesDirs = project.getTargetOfMergeOutputClasspath()
         val canonicalClassNames = project.getScanPathClassConicalNames(jsonSchemaJvmExtension)
         val classLoader = project.classLoader(javaClass.classLoader, classesDirs)
@@ -52,12 +68,6 @@ internal abstract class JsonSchemaJvmGenerationTask @Inject constructor(
         try {
             thread.contextClassLoader = classLoader
 
-            val srcPath = project.getSrcAbsolutePath().path
-            val outputPath = jsonSchemaJvmExtension.outputDirectory.getOrElse("$srcPath/json-schema-jvm")
-
-            val writeDatesAsTimestamps = jsonSchemaJvmExtension.writeDatesAsTimestamps.getOrElse(true)
-            MAPPER.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, writeDatesAsTimestamps)
-
             val projectClasses = canonicalClassNames
                 .map { classLoader.loadClass(it).kotlin }
                 .toSet()
@@ -68,15 +78,11 @@ internal abstract class JsonSchemaJvmGenerationTask @Inject constructor(
 
             logger.info("Annotated classes ${generateJsonSchemaAnnotations.size}")
 
-            val jsonSchemaConfig =
-                JsonSchemaConfig.vanillaJsonSchemaDraft4().withJsonSchemaDraft(JsonSchemaDraft.DRAFT_07)
-            val schemaGen = JsonSchemaGenerator(MAPPER, jsonSchemaConfig)
-
-            generateJsonSchemaAnnotations.forEach {
+            generateJsonSchemaAnnotations.forEach { klass ->
                 logger.info("Generate JSON schema file")
-                logger.info("Generating schema for: ${it.qualifiedName}")
+                logger.info("Generating schema for: ${klass.qualifiedName}")
 
-                val loadedClazz = classLoader.loadClass(it.qualifiedName).kotlin
+                val loadedClazz = classLoader.loadClass(klass.qualifiedName).kotlin
 
                 loadedClazz.constructors.forEach {
                     logger.info("Constructor: ${it.name}")
@@ -86,18 +92,12 @@ internal abstract class JsonSchemaJvmGenerationTask @Inject constructor(
                     }
                 }
 
-                val schema = schemaGen.generateJsonSchema(classLoader.loadClass(it.qualifiedName))
-                val schemaJsonText = PRETTY_WRITTER.writeValueAsString(schema)
+                val schema = schemaGen.generateJsonSchema(classLoader.loadClass(klass.qualifiedName))
+                val schemaJsonText = prettyMapper.writeValueAsString(schema)
 
                 logger.info("Generated JSON schema: $schemaJsonText")
 
-                val generatedJsonSchemaOutputFile = File("${outputPath}/${it.simpleName?.lowercase()}.json")
-                val generatedJsonSchemaOutputDir = generatedJsonSchemaOutputFile.parentFile
-
-                if (!generatedJsonSchemaOutputDir.exists()) {
-                    generatedJsonSchemaOutputDir.mkdirs()
-                }
-
+                val generatedJsonSchemaOutputFile = File(outputPath, nameFormatter.invoke(klass))
                 generatedJsonSchemaOutputFile.writeText(schemaJsonText)
             }
 
@@ -106,19 +106,4 @@ internal abstract class JsonSchemaJvmGenerationTask @Inject constructor(
         }
     }
 
-    override fun onlyIf(onlyIfReason: String, onlyIfSpec: Spec<in Task>) {
-        TODO("Not yet implemented")
-    }
-
-    override fun doNotTrackState(reasonNotToTrackState: String) {
-        TODO("Not yet implemented")
-    }
-
-    override fun notCompatibleWithConfigurationCache(reason: String) {
-        TODO("Not yet implemented")
-    }
-
-    override fun setOnlyIf(onlyIfReason: String, onlyIfSpec: Spec<in Task>) {
-        TODO("Not yet implemented")
-    }
 }

@@ -1,11 +1,11 @@
 package com.theblueground.json.schema.jvm.gradleplugin
 
-import org.gradle.api.Project
-import org.gradle.api.tasks.SourceSet
-import org.gradle.api.tasks.SourceSetContainer
 import java.io.File
 import java.net.URL
 import java.net.URLClassLoader
+import org.gradle.api.Project
+import org.gradle.api.tasks.SourceSet
+import org.gradle.api.tasks.SourceSetContainer
 
 internal fun Project.classLoader(parent: ClassLoader, target: File): ClassLoader {
     val classURLs =
