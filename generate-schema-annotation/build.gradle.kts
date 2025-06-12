@@ -9,6 +9,9 @@ plugins {
 
 repositories {
     mavenCentral()
+    maven {
+        url = uri("https://packages.confluent.io/maven/")
+    }
 }
 
 kotlin {
@@ -56,4 +59,9 @@ mavenPublishing {
     }
 
     signAllPublications()
+}
+
+dependencies {
+    implementation("io.confluent:kafka-json-schema-serializer:7.9.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 }
