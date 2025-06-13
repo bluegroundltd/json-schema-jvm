@@ -4,8 +4,8 @@ import com.vanniktech.maven.publish.GradlePublishPlugin
 
 plugins {
     `kotlin-dsl`
-    id("com.gradle.plugin-publish") version "1.2.1"
-    id("com.vanniktech.maven.publish") version "0.29.0"
+    id("com.gradle.plugin-publish") version "1.3.1"
+    id("com.vanniktech.maven.publish") version "0.32.0"
 }
 
 repositories {
@@ -17,6 +17,7 @@ dependencies {
     implementation("io.github.bluegroundltd:generate-schema-annotation:1.0.0")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.2")
     implementation("com.kjetland:mbknor-jackson-jsonschema_2.13:1.0.39")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.2")
 }
 
 kotlin {
@@ -33,7 +34,7 @@ gradlePlugin {
         create("generateJsonSchemaJvm") {
             id = "com.theblueground.json.schema.jvm.gradle-plugin"
             group = "com.theblueground"
-            version = "1.0.2"
+            version = "1.0.3"
             displayName = "JSON Schema Generation Plugin"
             description = "Generate JSON schema from annotated classes"
             tags = listOf("json", "schema")

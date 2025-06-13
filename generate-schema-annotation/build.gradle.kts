@@ -3,19 +3,21 @@ import com.vanniktech.maven.publish.KotlinJvm
 import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
-    kotlin("jvm") version "2.0.0"
-    id("org.jetbrains.dokka") version "1.9.20"
-    id("com.vanniktech.maven.publish") version "0.29.0"
+    kotlin("jvm") version "2.1.21"
+    id("com.vanniktech.maven.publish") version "0.32.0"
 }
 
 repositories {
     mavenCentral()
+    maven {
+        url = uri("https://packages.confluent.io/maven/")
+    }
 }
 
 kotlin {
     jvmToolchain(17)
     compilerOptions {
-        apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
+        apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_1)
     }
 }
 
@@ -29,7 +31,7 @@ mavenPublishing {
 
     publishToMavenCentral(SonatypeHost.S01, automaticRelease = true)
 
-    coordinates("io.github.bluegroundltd", "generate-schema-annotation", "1.0.0")
+    coordinates("io.github.bluegroundltd", "generate-schema-annotation", "1.0.1")
 
     pom {
         name.set("GenerateSchemaAnnotation")
@@ -57,4 +59,9 @@ mavenPublishing {
     }
 
     signAllPublications()
+}
+
+dependencies {
+    implementation("io.confluent:kafka-json-schema-serializer:7.9.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 }
